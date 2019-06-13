@@ -1,0 +1,30 @@
+import sys
+class Solution:
+    def maxProfit(self, prices) -> int:
+        n = len(prices)
+        if n<=1:
+            return 0
+        # dp = [[[0]*2 for _ in range(3)] for i in range(n)]
+        max_k = 2
+        dp = [[[0 for _ in range(2)] for _ in range(max_k+1)] for _ in range(len(prices))]
+        print(dp)
+        for i in range(n):
+            for k in range(1,3):
+                if i-1 == -1:
+                    dp[i][1][0] = dp[i][2][0] = 0
+                    dp[i][1][1] = dp[i][2][1] = -prices[i]
+                    # dp[i][k][0] = 0
+                    # dp[i][k][1] = -sys.maxsize -1
+
+                    continue
+
+                dp[i][k][0] = max(dp[i-1][k][0], dp[i-1][k][1]+prices[i])
+                dp[i][k][1] = max(dp[i-1][k][1], dp[i-1][k-1][0]-prices[i])
+        print(dp)
+        return dp[n-1][2][0]
+
+
+
+
+if __name__ == '__main__':
+    print(Solution().maxProfit([] ))
