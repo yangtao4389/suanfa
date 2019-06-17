@@ -26,7 +26,7 @@
 
 
 class Solution:
-    def minimumDeleteSum(self, s1: str, s2: str) -> int:
+    def minimumDeleteSum2(self, s1: str, s2: str) -> int:
         '''
         这种方式不行，因为要满足顺序也必须是一样的。。
         :param s1:
@@ -55,18 +55,56 @@ class Solution:
 
         return total
 
-    def minimumDeleteSum2(self, s1: str, s2: str) -> int:
+    def minimumDeleteSum(self, s1: str, s2: str) -> int:
+        '''
+        参考别人写的代码
+        :param s1:
+        :param s2:
+        :return:
+        1.s1[i-1] == s2[j-1]，新增的两个字符相等的情况下，没有必要删除之前的结果，因此dp[i][j] = dp[i-1][j-1]
+2.s1[i-1] != s2[j-1]，取三者的最小值
+（1）保留s2串，删除s1串的字符，dp[i][j] = dp[i-1][j] + s1.charAt(i-1)
+（2）保留s1串，删除s2串的字符，dp[i][j] = dp[i][j-1] + s1.charAt(j-1)
+（3）删除s1、s2串的字符，dp[i][j] = dp[i-1][j-1] + s1.charAt(i-1) + s2.charAt(j-1)
 
+        这种动态规划，有点类似于多向量求解问题。主要靠的是思维。
+        '''
+        m, n = len(s1), len(s2)
+        dp = [[float('inf') for _ in range(n + 1)] for i in range(m + 1)]      
+        dp[0][0] = 0
+        for i in range(m):
+            dp[i + 1][0] = dp[i][0] + ord(s1[i])
+        for i in range(n):
+            dp[0][i + 1] = dp[0][i] + ord(s2[i])
+        print(dp)
+        for i in range(1, m + 1):
+            for j in range(1, n + 1):
+                if s1[i - 1] == s2[j - 1]:  # 如果这两个值相等
+                    dp[i][j] = dp[i - 1][j - 1] # 该ASCII码值等于上一个
+                else:
+                    dp[i][j] = min(dp[i - 1][j] + ord(s1[i - 1]), dp[i][j - 1] + ord(s2[j - 1]))  # 等于最小值
+
+        print(dp)
+        return dp[-1][-1]
+
+    def minimumDeleteSum3(self, s1: str, s2: str) -> int:
+        '''
+        自己想想动态规划怎么求解
+        :param s1:
+        :param s2:
+        :return:
+        '''
+        pass
 
 
 
 
 if __name__ == '__main__':
+    print(Solution().minimumDeleteSum("delete", "leet"))  # 403
+    print(Solution().minimumDeleteSum("vwojt", "saqhgdrarwntji"))  # 1613
+    print(Solution().minimumDeleteSum("a", "at"))  # 116
+    print(Solution().minimumDeleteSum("sea", "eat"))  # 231
 
-    print(Solution().minimumDeleteSum( "delete","leet"))   # 403
-    print(Solution().minimumDeleteSum( "vwojt","saqhgdrarwntji"))  #1613
-    print(Solution().minimumDeleteSum("a","at"))  #     116
-    print(Solution().minimumDeleteSum("sea","eat"))  #     231
 
 
 
