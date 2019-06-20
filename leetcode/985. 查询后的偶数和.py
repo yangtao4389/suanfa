@@ -30,3 +30,30 @@
 0 <= queries[i][1] < A.length
 
 '''
+class Solution:
+    def sumEvenAfterQueries(self, A, queries) :
+        sum_even = 0
+        for i in A:
+            if i%2 == 0:
+                sum_even += i
+        res = []
+        for quire_list in queries:
+            val = quire_list[0]
+            index = quire_list[1]
+            if A[index] %2 == val %2 :  # 取余相等，则都相加，改变数
+                if A[index] %2 == 0:  # 都为偶数
+                    sum_even = sum_even+ val
+                else: # 都为基数
+                    sum_even = sum_even + val+A[index]
+            else:
+                if A[index] % 2 == 0:  # 曾经的偶数改成基数 相减
+                    sum_even = sum_even -A[index]
+            res.append(sum_even)
+
+            A[index] += val
+            print(A)
+
+        return res
+
+if __name__ == '__main__':
+    print(Solution().sumEvenAfterQueries( [1,2,3,4], [[1,0],[-3,1],[-4,0],[2,3]]))
